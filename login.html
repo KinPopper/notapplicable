@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AgriLink - Login</title>
+    <!-- LINK TO CSS FILE -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>AgriLink</h1>
+        <p>Direct Producer-to-Consumer Market</p>
+        <nav>
+            <a href="index.html">Home</a> | 
+            <a href="register.html">Register</a> | 
+            <a href="login.html">Login</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2 style="text-align: center;">User Login</h2>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Email Address:</label>
+                <input type="email" id="email" placeholder="juan@gmail.com" required>
+            </div>
+
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
+
+            <button type="submit" class="btn-submit">Login</button>
+        </form>
+
+        <p style="text-align: center; margin-top: 15px; font-size: 14px;">
+            Don't have an account? <a href="register.html" style="color: #2e7d32; font-weight: bold;">Register here</a>
+        </p>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 AgriLink - ICCT Colleges Web Project</p>
+    </footer>
+
+    <!-- ROUTING TO DASHBOARDS -->
+    <script>
+        // Producer Account and navigate to producer dashboard
+        function loginAsProducer() {
+            document.getElementById("email").value = "farmer@agrilink.com";
+            document.getElementById("password").value = "123456";
+            
+            // Redirect to Producer Dashboard
+            setTimeout(function() {
+                window.location.href = "producer.html";
+            }, 300);
+        }
+
+        // Pre-save Consumer Account and navigate to consumer marketplace
+        function loginAsConsumer() {
+            document.getElementById("email").value = "buyer@agrilink.com";
+            document.getElementById("password").value = "123456";
+            
+            // Redirect to Consumer Marketplace
+            setTimeout(function() {
+                window.location.href = "catalog.html";
+            }, 300);
+        }
+
+        // Handle regular login form submission
+        document.getElementById("loginForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            var email = document.getElementById("email").value;
+
+            // Route based on email input
+            if (email.includes("farmer") || email.includes("producer")) {
+                window.location.href = "producer.html";
+            } else {
+                window.location.href = "catalog.html";
+            }
+        });
+    </script>
+
+</body>
+</html>

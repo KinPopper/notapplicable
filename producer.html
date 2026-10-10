@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriLink - Producer Dashboard</title>
+    <!-- LINK TO YOUR SEPARATE CSS FILE -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- HEADER / NAVIGATION -->
+    <header>
+        <h1>AgriLink</h1>
+        <p>Producer Control Panel</p>
+        <nav>
+            <a href="producer.html">Dashboard</a> | 
+            <a href="catalog.html">Marketplace</a> | 
+            <a href="login.html">Logout</a>
+        </nav>
+    </header>
+
+    <!-- MAIN DASHBOARD CONTAINER -->
+    <div class="container">
+        
+        <!-- FARMER PROFILE SECTION -->
+        <div style="border-bottom: 2px solid #2e7d32; padding-bottom: 10px; margin-bottom: 20px;">
+            <h2 style="color: #2e7d32; margin-bottom: 5px;">👨‍🌾 Welcome, Juan Dela Cruz!</h2>
+            <p style="margin: 0;"><strong>Farm Name:</strong> Dela Cruz Organic Farms</p>
+            <p style="margin: 0;"><strong>Location:</strong> Rizal, Philippines</p>
+        </div>
+
+        <!-- FORM: ADD NEW HARVEST LISTING -->
+        <h3>➕ Add New Harvest Listing</h3>
+        <form style="margin-bottom: 30px;">
+            <div class="form-group">
+                <label>Crop / Produce Name:</label>
+                <input type="text" placeholder="e.g. Fresh Red Tomatoes" required>
+            </div>
+
+            <div class="form-group">
+                <label>Category:</label>
+                <select>
+                    <option value="vegetables">Vegetables</option>
+                    <option value="fruits">Fruits</option>
+                    <option value="grains">Grains & Rice</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Price per Kilogram (₱):</label>
+                <input type="number" placeholder="e.g. 60" required>
+            </div>
+
+            <div class="form-group">
+                <label>Available Stock (kg):</label>
+                <input type="number" placeholder="e.g. 100" required>
+            </div>
+
+            <button type="submit" class="btn-submit">Post Crop Listing</button>
+        </form>
+
+        <!-- SECTION: CURRENT CROP LISTINGS -->
+        <h3 style="margin-top: 30px;">📦 Active Harvest Listings</h3>
+        
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+            <thead>
+                <tr style="background-color: #2e7d32; color: white;">
+                    <th style="padding: 8px; border: 1px solid #ccc; text-align: left;">Crop Name</th>
+                    <th style="padding: 8px; border: 1px solid #ccc; text-align: left;">Category</th>
+                    <th style="padding: 8px; border: 1px solid #ccc; text-align: left;">Price/kg</th>
+                    <th style="padding: 8px; border: 1px solid #ccc; text-align: left;">Stock</th>
+                    <th style="padding: 8px; border: 1px solid #ccc; text-align: center;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ccc;">🍅 Red Tomatoes</td>
+                    <td style="padding: 8px; border: 1px solid #ccc;">Vegetables</td>
+                    <td style="padding: 8px; border: 1px solid #ccc;">₱60.00</td>
+                    <td style="padding: 8px; border: 1px solid #ccc;">100 kg</td>
+                    <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">
+                        <button style="background: #d9534f; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer;">Remove</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ccc;">🌽 Sweet Corn</td>
+                    <td style="padding: 8px; border: 1px solid #ccc;">Grains</td>
+                    <td style="padding: 8px; border: 1px solid #ccc;">₱45.00</td>
+                    <td style="padding: 8px; border: 1px solid #ccc;">250 kg</td>
+                    <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">
+                        <button style="background: #d9534f; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer;">Remove</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- SECTION: INCOMING ORDERS -->
+        <h3>📋 Received Orders from Buyers</h3>
+        
+        <div style="border: 1px solid #ccc; border-radius: 5px; padding: 15px; margin-bottom: 10px; background-color: #fdfdfd;">
+            <p style="margin: 0 0 5px 0;"><strong>Order #101</strong> — Maria Santos</p>
+            <p style="margin: 0 0 5px 0;"><strong>Item:</strong> Red Tomatoes (10 kg)</p>
+            <p style="margin: 0 0 10px 0;"><strong>Total Price:</strong> ₱600.00</p>
+            <button style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 3px; cursor: pointer;">Accept Order</button>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 AgriLink - ICCT Colleges Web Project</p>
+    </footer>
+
+</body>
+</html>
