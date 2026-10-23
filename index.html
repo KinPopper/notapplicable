@@ -1,1 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noterator for Broker Services</title>
+    <style>
+        :root {
+            --primary-color: #1e293b;
+            --primary-hover: #334155;
+            --accent-color: #2563eb;
+            --accent-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #0f172a;
+            --border-color: #cbd5e1;
+            --danger-color: #ef4444;
+            --danger-hover: #dc2626;
+            --success-color: #10b981;
+        }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header {
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 12px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 8px 12px;
+            background-color: rgba(0,0,0,0.02);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .radio-option input[type="radio"] {
+            cursor: pointer;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+
+        input, select, textarea {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 0.9rem;
+            outline: none;
+            background-color: #fff;
+            color: #000;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .disabled-section {
+            opacity: 0.5;
+            pointer-events: none;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: var(--danger-hover);
+        }
+
+        .notes-display {
+            background-color: rgba(0,0,0,0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            min-height: 200px;
+            max-height: 350px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+        .saved-calls-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .saved-call-card {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            background-color: var(--card-bg);
+            font-size: 0.85rem;
+        }
+
+        .saved-call-header {
+            font-weight: bold;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .saved-call-field {
+            margin-bottom: 4px;
+            white-space: pre-wrap;
+        }
+
+        .saved-call-field span {
+            font-weight: 600;
+        }
+
+        .filter-container {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .filter-container input {
+            flex: 1;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Modal Styles for Theme Settings */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .theme-preset-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .theme-preset-btn {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .alert-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 1001;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div>
+            <h1>Noterator for Broker Services</h1>
+            <div class="subtitle">Internal Documentation & Call Logging Tool by Kin</div>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-secondary" onclick="openThemeModal()">⚙ Settings</button>
+            <button class="btn btn-danger" onclick="clearForm()">Clear Current Form</button>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <!-- Input Form Column -->
+        <div class="form-section">
+            
+            <!-- Interaction ID Container -->
+            <div class="card">
+                <div class="grid-2">
+                    <div class="form-group full-width">
+                        <label for="interactionId">Interaction ID No. <small style="opacity: 0.6;">(For No. of Call Container purposes - not added to generated notes)</small></label>
+                        <input type="text" id="interactionId" placeholder="Enter Interaction / Ref ID">
+                    </div>
+                </div>
+            </div>
+
+            <!-- CALLER Container -->
+            <div class="card">
+                <div class="card-title">CALLER</div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="callerType">Caller Type</label>
+                        <select id="callerType" onchange="handleCallerTypeChange()">
+                            <option value="Broker">Broker</option>
+                            <option value="Admin">Admin</option>
+                            <option value="Member">Member</option>
+                            <option value="Other">Other: Specify...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group hidden" id="otherTypeGroup">
+                        <label for="otherType">Specify Caller Type</label>
+                        <input type="text" id="otherType" placeholder="Specify type">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" placeholder="First Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" placeholder="Last Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="callerIdNo">ID No. (e.g. NPN, TIN, Encrypted TIN)</label>
+                        <input type="text" id="callerIdNo" placeholder="ID Number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="agencyName">Agency Name</label>
+                        <input type="text" id="agencyName" placeholder="Agency Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="Email Address">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number</label>
+                        <input type="text" id="phoneNumber" placeholder="(999) 999-9999" oninput="formatPhoneNumber(this)">
+                    </div>
+
+                    <!-- Member Specific Fields in CALLER section -->
+                    <div class="form-group hidden member-caller-field">
+                        <label for="callerDob">DOB (Member)</label>
+                        <input type="date" id="callerDob">
+                    </div>
+
+                    <div class="form-group hidden member-caller-field">
+                        <label for="callerGroupId">Group ID No. (Member)</label>
+                        <input type="text" id="callerGroupId" placeholder="Group ID">
+                    </div>
+
+                    <div class="form-group hidden member-caller-field full-width">
+                        <label for="callerGroupName">Group Name (Member)</label>
+                        <input type="text" id="callerGroupName" placeholder="Group Name">
+                    </div>
+                </div>
+            </div>
+
+            <!-- CALLING FOR Container -->
+            <div class="card" id="callingForCard">
+                <div class="card-title" id="callingForTitle">CALLING FOR</div>
+                
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="callingForType" value="member" checked onchange="toggleCallingForType()"> Member
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="callingForType" value="group" onchange="toggleCallingForType()"> Group
+                    </label>
+                </div>
+
+                <!-- Member Mode Fields -->
+                <div id="callingForMemberSection" class="grid-2">
+                    <div class="form-group">
+                        <label for="targetMemberId">ID No. (Member ID)</label>
+                        <input type="text" id="targetMemberId" placeholder="Member ID">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="targetMemberFirstName">First Name</label>
+                        <input type="text" id="targetMemberFirstName" placeholder="Member First Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="targetMemberLastName">Last Name</label>
+                        <input type="text" id="targetMemberLastName" placeholder="Member Last Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="targetGroupId">Group ID No.</label>
+                        <input type="text" id="targetGroupId" placeholder="Group ID">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="targetGroupName">Group Name</label>
+                        <input type="text" id="targetGroupName" placeholder="Group Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="targetDob">DOB</label>
+                        <input type="date" id="targetDob">
+                    </div>
+                </div>
+
+                <!-- Group Mode Fields -->
+                <div id="callingForGroupSection" class="grid-2 hidden">
+                    <div class="form-group">
+                        <label for="groupTargetId">ID No.</label>
+                        <input type="text" id="groupTargetId" placeholder="ID Number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="groupTargetNo">Group No.</label>
+                        <input type="text" id="groupTargetNo" placeholder="Group Number">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="groupTargetName">Group Name</label>
+                        <input type="text" id="groupTargetName" placeholder="Group Name">
+                    </div>
+                </div>
+            </div>
+
+            <!-- REASON FOR CALLING Container -->
+            <div class="card">
+                <div class="card-title">REASON FOR CALLING</div>
+                <div class="form-group">
+                    <textarea id="reasonForCalling" placeholder="Enter reason for calling. Press Enter to create bullets automatically." onkeydown="handleBulletFormatting(event)"></textarea>
+                </div>
+            </div>
+
+            <!-- ACTIONS TAKEN Container -->
+            <div class="card">
+                <div class="card-title">ACTIONS TAKEN</div>
+                <div class="form-group">
+                    <textarea id="actionsTaken" placeholder="Enter actions taken. Press Enter to create bullets automatically." onkeydown="handleBulletFormatting(event)"></textarea>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Output & History Column -->
+        <div class="form-section">
+            
+            <!-- NOTES Generated Area -->
+            <div class="card">
+                <div class="card-title">NOTES (Generated)</div>
+                <div class="notes-display" id="notesPreview"></div>
+                <div class="btn-container">
+                    <button class="btn btn-secondary" onclick="copyNotes()">Copy Notes</button>
+                    <button class="btn btn-primary" onclick="saveCallLog()">Save Log</button>
+                </div>
+            </div>
+
+            <!-- CALLS: Saved Container -->
+            <div class="card">
+                <div class="card-title">
+                    CALLS: <span id="callCount">0</span> Calls Saved
+                </div>
+                
+                <div class="filter-container">
+                    <label for="dateFilter" style="margin:0; white-space:nowrap;">Filter Date:</label>
+                    <input type="date" id="dateFilter" onchange="renderSavedCalls()">
+                    <button class="btn btn-secondary" style="padding: 6px 10px;" onclick="clearDateFilter()">Clear</button>
+                </div>
+
+                <div class="saved-calls-list" id="savedCallsList">
+                    <!-- Saved call items rendered here -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Theme Customization Modal -->
+    <div class="modal" id="themeModal">
+        <div class="modal-content">
+            <div class="card-title">Color Theme Settings</div>
+            
+            <p style="font-size:0.85rem; margin-bottom:15px; opacity:0.8;">Select a theme preset or customize colors below:</p>
+
+            <div class="theme-preset-grid">
+                <div class="theme-preset-btn" onclick="applyPreset('default')">Default Slate</div>
+                <div class="theme-preset-btn" onclick="applyPreset('ocean')">Ocean Blue</div>
+                <div class="theme-preset-btn" onclick="applyPreset('emerald')">Emerald Green</div>
+                <div class="theme-preset-btn" onclick="applyPreset('dark')">Dark Mode</div>
+                <div class="theme-preset-btn" onclick="applyPreset('purple')">Royal Purple</div>
+                <div class="theme-preset-btn" onclick="applyPreset('warm')">Warm Amber</div>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="customPrimary">Primary Header Color</label>
+                    <input type="color" id="customPrimary" onchange="applyCustomTheme()">
+                </div>
+
+                <div class="form-group">
+                    <label for="customAccent">Accent Button Color</label>
+                    <input type="color" id="customAccent" onchange="applyCustomTheme()">
+                </div>
+
+                <div class="form-group">
+                    <label for="customBg">Background Color</label>
+                    <input type="color" id="customBg" onchange="applyCustomTheme()">
+                </div>
+
+                <div class="form-group">
+                    <label for="customCardBg">Card Background</label>
+                    <input type="color" id="customCardBg" onchange="applyCustomTheme()">
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="customText">Text Color</label>
+                    <input type="color" id="customText" onchange="applyCustomTheme()">
+                </div>
+            </div>
+
+            <div class="btn-container" style="justify-content: flex-end; margin-top:15px;">
+                <button class="btn btn-secondary" onclick="closeThemeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert-toast" id="toast">Action performed successfully!</div>
+
+    <script>
+        // DOM Elements
+        const inputs = document.querySelectorAll('input, select, textarea');
+        const callerTypeSelect = document.getElementById('callerType');
+        const otherTypeGroup = document.getElementById('otherTypeGroup');
+        const callingForCard = document.getElementById('callingForCard');
+        const memberCallerFields = document.querySelectorAll('.member-caller-field');
+        const notesPreview = document.getElementById('notesPreview');
+        const savedCallsList = document.getElementById('savedCallsList');
+        const callCountSpan = document.getElementById('callCount');
+        const dateFilter = document.getElementById('dateFilter');
+        const themeModal = document.getElementById('themeModal');
+
+        // Initial Data Load
+        let savedCalls = JSON.parse(localStorage.getItem('broker_service_calls') || '[]');
+
+        // Presets Configuration
+        const presets = {
+            default: { primary: '#1e293b', accent: '#2563eb', bg: '#f8fafc', cardBg: '#ffffff', text: '#0f172a' },
+            ocean: { primary: '#0c4a6e', accent: '#0284c7', bg: '#f0f9ff', cardBg: '#ffffff', text: '#0c4a6e' },
+            emerald: { primary: '#064e3b', accent: '#059669', bg: '#ecfdf5', cardBg: '#ffffff', text: '#064e3b' },
+            dark: { primary: '#0f172a', accent: '#3b82f6', bg: '#020617', cardBg: '#0f172a', text: '#f8fafc' },
+            purple: { primary: '#4c1d95', accent: '#7c3aed', bg: '#faf5ff', cardBg: '#ffffff', text: '#3b0764' },
+            warm: { primary: '#78350f', accent: '#d97706', bg: '#fffbeb', cardBg: '#ffffff', text: '#451a03' }
+        };
+
+        // Attach Event Listeners to Form Inputs
+        inputs.forEach(input => {
+            if (!input.id.startsWith('custom') && input.id !== 'dateFilter') {
+                input.addEventListener('input', updateNotesPreview);
+            }
+        });
+
+        // Initialize Page
+        window.onload = function() {
+            loadSavedTheme();
+            handleCallerTypeChange();
+            toggleCallingForType();
+            renderSavedCalls();
+            updateNotesPreview();
+        };
+
+        // Handle Bullet Formatting on Enter Key
+        function handleBulletFormatting(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const textarea = e.target;
+                const start = textarea.selectionStart;
+                const end = textarea.selectionEnd;
+                const value = textarea.value;
+
+                if (value.length === 0) {
+                    textarea.value = "• ";
+                } else {
+                    textarea.value = value.substring(0, start) + "\n• " + value.substring(end);
+                    textarea.selectionStart = textarea.selectionEnd = start + 3;
+                }
+                updateNotesPreview();
+            } else if (e.target.value === '' && (e.key !== 'Backspace' && e.key !== 'Delete')) {
+                e.target.value = "• ";
+            }
+        }
+
+        // Phone Number Auto Formatting (999) 999-9999
+        function formatPhoneNumber(input) {
+            let num = input.value.replace(/\D/g, '');
+            if (num.length > 10) num = num.substring(0, 10);
+            
+            let formatted = '';
+            if (num.length > 0) {
+                formatted = '(' + num.substring(0, 3);
+            }
+            if (num.length >= 4) {
+                formatted += ') ' + num.substring(3, 6);
+            }
+            if (num.length >= 7) {
+                formatted += '-' + num.substring(6, 10);
+            }
+            input.value = formatted;
+        }
+
+        // Toggle CALLER Type Mechanics
+        function handleCallerTypeChange() {
+            const type = callerTypeSelect.value;
+            
+            if (type === 'Other') {
+                otherTypeGroup.classList.remove('hidden');
+            } else {
+                otherTypeGroup.classList.add('hidden');
+            }
+
+            if (type === 'Member') {
+                callingForCard.classList.add('disabled-section');
+                memberCallerFields.forEach(el => el.classList.remove('hidden'));
+            } else {
+                callingForCard.classList.remove('disabled-section');
+                memberCallerFields.forEach(el => el.classList.add('hidden'));
+            }
+
+            updateNotesPreview();
+        }
+
+        // Toggle Member / Group Radio Selection under CALLING FOR
+        function toggleCallingForType() {
+            const selectedType = document.querySelector('input[name="callingForType"]:checked').value;
+            const memberSec = document.getElementById('callingForMemberSection');
+            const groupSec = document.getElementById('callingForGroupSection');
+
+            if (selectedType === 'member') {
+                memberSec.classList.remove('hidden');
+                groupSec.classList.add('hidden');
+            } else {
+                memberSec.classList.add('hidden');
+                groupSec.classList.remove('hidden');
+            }
+            updateNotesPreview();
+        }
+
+        // Live Generate Notes Preview
+        function updateNotesPreview() {
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const callerType = callerTypeSelect.value === 'Other' ? document.getElementById('otherType').value.trim() : callerTypeSelect.value;
+            const callerId = document.getElementById('callerIdNo').value.trim();
+            const agency = document.getElementById('agencyName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phoneNumber').value.trim();
+
+            const callerDob = document.getElementById('callerDob').value;
+            const callerGroupId = document.getElementById('callerGroupId').value.trim();
+            const callerGroupName = document.getElementById('callerGroupName').value.trim();
+
+            const reason = document.getElementById('reasonForCalling').value.trim();
+            const actions = document.getElementById('actionsTaken').value.trim();
+
+            let notes = `CALLER INFORMATION\n`;
+            notes += `-------------------\n`;
+            notes += `Caller Name: ${firstName} ${lastName}\n`;
+            notes += `Caller Type: ${callerType}\n`;
+            notes += `ID No.: ${callerId}\n`;
+            notes += `Agency Name: ${agency}\n`;
+            notes += `Email: ${email}\n`;
+            notes += `Phone Number: ${phone}\n`;
+
+            if (callerTypeSelect.value === 'Member') {
+                if(callerDob) notes += `DOB: ${callerDob}\n`;
+                if(callerGroupId) notes += `Group ID No.: ${callerGroupId}\n`;
+                if(callerGroupName) notes += `Group Name: ${callerGroupName}\n`;
+            } else {
+                notes += `\nCALLING FOR\n`;
+                notes += `-----------\n`;
+                const callingForType = document.querySelector('input[name="callingForType"]:checked').value;
+                if (callingForType === 'member') {
+                    const targetMemberId = document.getElementById('targetMemberId').value.trim();
+                    const targetMemberFirstName = document.getElementById('targetMemberFirstName').value.trim();
+                    const targetMemberLastName = document.getElementById('targetMemberLastName').value.trim();
+                    const targetGroupId = document.getElementById('targetGroupId').value.trim();
+                    const targetGroupName = document.getElementById('targetGroupName').value.trim();
+                    const targetDob = document.getElementById('targetDob').value;
+
+                    notes += `Target: Member\n`;
+                    notes += `Member ID No.: ${targetMemberId}\n`;
+                    notes += `Member Name: ${targetMemberFirstName} ${targetMemberLastName}\n`;
+                    notes += `Group ID No.: ${targetGroupId}\n`;
+                    notes += `Group Name: ${targetGroupName}\n`;
+                    notes += `DOB: ${targetDob}\n`;
+                } else {
+                    const groupTargetId = document.getElementById('groupTargetId').value.trim();
+                    const groupTargetNo = document.getElementById('groupTargetNo').value.trim();
+                    const groupTargetName = document.getElementById('groupTargetName').value.trim();
+
+                    notes += `Target: Group\n`;
+                    notes += `ID No.: ${groupTargetId}\n`;
+                    notes += `Group No.: ${groupTargetNo}\n`;
+                    notes += `Group Name: ${groupTargetName}\n`;
+                }
+            }
+
+            notes += `\nReason for Calling:\n${reason}\n`;
+            notes += `\nActions Taken:\n${actions}\n`;
+
+            notesPreview.textContent = notes;
+        }
+
+        // Save Call Record & Print Output Summary
+        function saveCallLog() {
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const callerType = callerTypeSelect.value === 'Other' ? document.getElementById('otherType').value.trim() : callerTypeSelect.value;
+            const email = document.getElementById('email').value.trim();
+            const interactionId = document.getElementById('interactionId').value.trim();
+
+            const reason = document.getElementById('reasonForCalling').value.trim();
+            const actions = document.getElementById('actionsTaken').value.trim();
+
+            const fullName = `${firstName} ${lastName}`.trim() || 'N/A';
+
+            let grpId = 'N/A';
+            let memId = 'N/A';
+
+            if (callerTypeSelect.value === 'Member') {
+                grpId = document.getElementById('callerGroupId').value.trim() || 'N/A';
+                memId = document.getElementById('callerIdNo').value.trim() || 'N/A';
+            } else {
+                const callingForType = document.querySelector('input[name="callingForType"]:checked').value;
+                if (callingForType === 'member') {
+                    grpId = document.getElementById('targetGroupId').value.trim() || 'N/A';
+                    memId = document.getElementById('targetMemberId').value.trim() || 'N/A';
+                } else {
+                    grpId = document.getElementById('groupTargetNo').value.trim() || 'N/A';
+                    memId = document.getElementById('groupTargetId').value.trim() || 'N/A';
+                }
+            }
+
+            // Printed summary exact format requested
+            const printedSummary = `Caller Name: ${fullName}\nCaller Type: ${callerType}\nEmail: ${email}\n\nReason for Calling:\n${reason}\n\nActions Taken:\n${actions}`;
+
+            console.log("Printed Call Log:\n" + printedSummary);
+
+            const newLog = {
+                id: Date.now(),
+                timestamp: new Date().toISOString(),
+                dateFormatted: new Date().toLocaleDateString(),
+                interactionId: interactionId,
+                name: fullName,
+                callerType: callerType,
+                email: email,
+                grpId: grpId,
+                memId: memId,
+                reason: reason,
+                actions: actions,
+                printedSummary: printedSummary
+            };
+
+            savedCalls.unshift(newLog);
+            localStorage.setItem('broker_service_calls', JSON.stringify(savedCalls));
+            renderSavedCalls();
+            showToast("Call info saved successfully!");
+        }
+
+        // Render Saved Calls with Date Filtering
+        function renderSavedCalls() {
+            const filterValue = dateFilter.value;
+            savedCallsList.innerHTML = '';
+
+            let filteredList = savedCalls;
+
+            if (filterValue) {
+                filteredList = savedCalls.filter(call => {
+                    const callDate = new Date(call.timestamp).toISOString().split('T')[0];
+                    return callDate === filterValue;
+                });
+            }
+
+            callCountSpan.textContent = filteredList.length;
+
+            if (filteredList.length === 0) {
+                savedCallsList.innerHTML = '<div style="text-align:center; opacity:0.6; padding:20px;">No saved calls found.</div>';
+                return;
+            }
+
+            filteredList.forEach(call => {
+                const card = document.createElement('div');
+                card.className = 'saved-call-card';
+                card.innerHTML = `
+                    <div class="saved-call-header">
+                        <span>Date and Name: ${call.dateFormatted} - ${call.name}</span>
+                        ${call.interactionId ? `<small>(Ref: ${call.interactionId})</small>` : ''}
+                    </div>
+                    <div class="saved-call-field"><span>Name:</span> ${call.name}</div>
+                    <div class="saved-call-field"><span>Grp ID:</span> ${call.grpId}</div>
+                    <div class="saved-call-field"><span>Mem ID:</span> ${call.memId}</div>
+                    <div class="saved-call-field"><span>Reason for Calling:</span> ${call.reason}</div>
+                    <div class="saved-call-field"><span>Actions Taken:</span> ${call.actions}</div>
+                `;
+                savedCallsList.appendChild(card);
+            });
+        }
+
+        function clearDateFilter() {
+            dateFilter.value = '';
+            renderSavedCalls();
+        }
+
+        // Clear Form for New Call
+        function clearForm() {
+            document.querySelectorAll('input').forEach(input => {
+                if (!input.id.startsWith('custom') && input.id !== 'dateFilter' && input.type !== 'radio') {
+                    input.value = '';
+                }
+            });
+            document.querySelectorAll('textarea').forEach(textarea => textarea.value = '');
+            callerTypeSelect.value = 'Broker';
+            document.querySelector('input[name="callingForType"][value="member"]').checked = true;
+            handleCallerTypeChange();
+            toggleCallingForType();
+            updateNotesPreview();
+            showToast("Form cleared for upcoming call!");
+        }
+
+        // Copy Generated Notes
+        function copyNotes() {
+            const textToCopy = notesPreview.textContent;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showToast("Notes copied to clipboard!");
+            }).catch(err => {
+                showToast("Failed to copy notes");
+            });
+        }
+
+        // Theme Modal & Settings
+        function openThemeModal() {
+            themeModal.classList.add('active');
+        }
+
+        function closeThemeModal() {
+            themeModal.classList.remove('active');
+        }
+
+        function applyThemeColors(theme) {
+            document.documentElement.style.setProperty('--primary-color', theme.primary);
+            document.documentElement.style.setProperty('--accent-color', theme.accent);
+            document.documentElement.style.setProperty('--bg-color', theme.bg);
+            document.documentElement.style.setProperty('--card-bg', theme.cardBg);
+            document.documentElement.style.setProperty('--text-color', theme.text);
+
+            document.getElementById('customPrimary').value = theme.primary;
+            document.getElementById('customAccent').value = theme.accent;
+            document.getElementById('customBg').value = theme.bg;
+            document.getElementById('customCardBg').value = theme.cardBg;
+            document.getElementById('customText').value = theme.text;
+
+            localStorage.setItem('broker_theme', JSON.stringify(theme));
+        }
+
+        function applyPreset(presetName) {
+            if (presets[presetName]) {
+                applyThemeColors(presets[presetName]);
+                showToast(`Applied ${presetName} theme`);
+            }
+        }
+
+        function applyCustomTheme() {
+            const customTheme = {
+                primary: document.getElementById('customPrimary').value,
+                accent: document.getElementById('customAccent').value,
+                bg: document.getElementById('customBg').value,
+                cardBg: document.getElementById('customCardBg').value,
+                text: document.getElementById('customText').value
+            };
+            applyThemeColors(customTheme);
+        }
+
+        function loadSavedTheme() {
+            const savedTheme = JSON.parse(localStorage.getItem('broker_theme') || 'null');
+            if (savedTheme) {
+                applyThemeColors(savedTheme);
+            } else {
+                applyThemeColors(presets.default);
+            }
+        }
+
+        // Toast Feedback
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
